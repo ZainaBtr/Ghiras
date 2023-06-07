@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('components_in_meals', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('password');
-            $table->boolean('is_admin')->default(false);
-            $table->rememberToken();
+            $table->foreignId('meal_name')->default(1)->constrained('meals')->cascadeOnDelete();
+            $table->foreignId('component_id')->default(1)->constrained('components');
+            $table->float('component_in_meal_quantity');
+            $table->string('component_in_meal_unit_of_measurement');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('components_in_meals');
     }
 };
