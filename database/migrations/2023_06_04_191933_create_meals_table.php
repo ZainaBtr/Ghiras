@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('meals', function (Blueprint $table) {
-<<<<<<< HEAD
             $table->id();
             $table -> string('meal_name')->unique();
             $table->foreignId("category_id")->default(1)->constrained('categories')->cascadeOnDelete();
@@ -26,18 +25,6 @@ return new class extends Migration
             $table->string('meal_picture');
             $table->text('meal_description');
             $table->boolean('meal_In_menu')->default(false);
-=======
-            $table -> string('meal_name')->primary()->unique();
-            $table->string('category_name');
-            $table->foreign('category_name')->references('category_name')->on('categories')->cascadeOnDelete();
-            $table -> string('meal_type');
-            $table -> float('meal_price');
-            $table -> float('meal_price_show');
-            $table -> Integer('meal_ready_quantity');
-            $table->string('meal_picture');
-            $table->text('meal_description');
-            $table->boolean('meal_In_menu');
->>>>>>> origin/main
             $table->timestamps();
         });
     }
