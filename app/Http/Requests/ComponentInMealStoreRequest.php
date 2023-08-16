@@ -35,10 +35,11 @@ class ComponentInMealStoreRequest extends FormRequest
 
     public function rules()
     {
+//        $meal_id = $this->meal;
+
         return [
             'component_name' => ['required','string',
-                Rule::unique('components')
-                    ->where('meal_id', $this->meal->id)
+
             ],
             'component_in_meal_quantity' => ['required','numeric','gte:0'],
             'component_in_meal_unit_of_measurement' => ['required','string']

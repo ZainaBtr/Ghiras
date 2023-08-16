@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category_storeRequest;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
+use App\Models\Meal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,6 +30,12 @@ class CategoryController extends Controller
         // HTTP_OK = 200  *    *
     }
 
+    public function get_meals_in(Category $category){
+        $id = $category->id;
+        $meals_in_category = Meal::Where('category_id',$id)->get()->pluck('meal_name')->all();
+        return response()->json($meals_in_category,Response::HTTP_OK);
+
+    }
     /**
      * Store a newly created resource in storage.
      *

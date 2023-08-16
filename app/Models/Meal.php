@@ -25,7 +25,13 @@ class Meal extends Model
     protected $hidden = [
     ];
 
-    public function categories(){
-        return $this->belongsTo(Category::class,'category_id');
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function components()
+    {
+        return $this->belongsToMany(Component::class, 'component_in_meal', 'meal_id', 'component_id')
+            ->withPivot('quantity', 'unit_of_measurement');
     }
 }

@@ -28,7 +28,6 @@ class MealController extends Controller
 
         foreach ($meals as $meal)
         {
-
             $category_id = $meal['category_id'];
 
             $category = Category::Where('id', $category_id)->first();
@@ -38,6 +37,7 @@ class MealController extends Controller
             $mealsArray = [
                 'meal_name' => $meal['meal_name'],
                 'meal_type' => $meal['meal_type'],
+                'meal_price' =>$meal['meal_price'],
                 'meal_price_show' => $meal['meal_price_show'],
                 'meal_picture' => $meal['meal_picture'],
                 'meal_description' => $meal['meal_description'],
@@ -49,10 +49,13 @@ class MealController extends Controller
 
             $meals_data->push($data) ;
         }
+        $clieant_meal_data =  $meals_data ->pluck('meal_name')->all();
 
 
         return response()->json($meals_data,Response::HTTP_OK);
     }
+
+
 
     public function menu()
     {

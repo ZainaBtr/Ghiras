@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\Component_In_MealController;
+use App\Http\Controllers\Meal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,8 +25,9 @@ class Component extends Model
         'component_appointment_end_date_reminder'
     ];
 
-    public function meal(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function meals()
     {
-        return $this->belongsToMany(Meal::class)->withPivot('component_in_meal_quantity');
+        return $this->belongsToMany(Meal::class, 'component_in_meal', 'component_id', 'meal_id')
+            ->withPivot('quantity', 'unit_of_measurement');
     }
 }

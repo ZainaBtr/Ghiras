@@ -22,11 +22,12 @@ Route::post('/auth/login',[App\Http\Controllers\AuthController::class,'login']);
 Route::post('/auth/clientregister',[App\Http\Controllers\AuthController::class,'createClientAccount']);
 Route::post('/auth/clientlogin',[App\Http\Controllers\AuthController::class,'clientLogin']);
 Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::class,'updateClientAccount']);
+//Route::get('/auth/show_client_profile',[App\Http\Controllers\AuthController::class,'show_client_profile']);
 //Route::get('/auth/logout',[App\Http\Controllers\AuthController::class,'logout']);
-
 //Route::middleware(['auth:api'])->group(function() {
     Route::prefix("categories")->group( function () {
         Route::get('/',[\App\Http\Controllers\CategoryController::class,'index']);
+        Route::get('/{category}',[\App\Http\Controllers\CategoryController::class,'get_meals_in']);
         Route::post('/',[\App\Http\Controllers\CategoryController::class,'store']);
         Route::delete('/{category}', [\App\Http\Controllers\CategoryController::class,'destroy']);
     });
@@ -52,15 +53,16 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
       //  Route::post('/meals/{meal_id}/components', 'MealComponentController@store');
         Route::post('/{meal}',[\App\Http\Controllers\Component_In_MealController::class, 'store']);
         // Route::get('/{id}',[\App\Http\Controllers\Component_In_MealController::class, 'show']);
-      //  Route::put('/{id}',[\App\Http\Controllers\Component_In_MealController::class, 'update']);
-        Route::delete('/component_in_meal',[\App\Http\Controllers\Component_In_MealController::class, 'destroy']);
+        Route::put('/{meal}/{component_in_meal}',[\App\Http\Controllers\Component_In_MealController::class, 'update']);
+        Route::delete('/{meal}/{component_in_meal}',[\App\Http\Controllers\Component_In_MealController::class, 'destroy']);
     });
 
 //});
 
 
 
+Route::middleware(['auth:api'])->group(function() {
+    Route::get('/auth/show_client_profile',[App\Http\Controllers\AuthController::class,'show_client_profile']);
 
-
-
+});
 

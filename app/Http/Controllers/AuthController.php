@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+
+
     public function login(Request $request)
     {
 
@@ -166,6 +168,20 @@ class AuthController extends Controller
         return response()->json( $user , Response::HTTP_OK);
     }
 
+    public function show_client_profile(): \Illuminate\Http\JsonResponse
+    {
+        $user = auth()->user(); // الحصول على معلومات المستخدم المسجل الحالي
+        $userData = [
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'address' => $user->address,
+            'gender' => $user->gender,
+            'age' => $user->age,
+            'phone_number' => $user->phone_number,
+        ];
+        return response()->json($userData, 200);
+
+    }
 
 }
 

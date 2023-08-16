@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ComponentInMealStoreRequest;
+use App\Http\Requests\ComponentInMealUpdateRequest;
 use App\Models\Component;
 use App\Models\Component_in_meal;
 use App\Models\Meal;
@@ -16,11 +17,10 @@ class Component_In_MealController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     #[NoReturn] public function index()
     {
-        //
         $component_in_meal = Component_in_meal::query()->get()->all();
 
         return response()->json($component_in_meal, Response::HTTP_OK);
@@ -36,7 +36,9 @@ class Component_In_MealController extends Controller
 
     public function store(ComponentInMealStoreRequest $request, Meal $meal)
     {
+        try{
         $validated = $request->validated();
+
 
         $component_names = $validated['component_name'];
 
@@ -49,18 +51,34 @@ class Component_In_MealController extends Controller
             'component_in_meal_unit_of_measurement' => $validated['component_in_meal_unit_of_measurement'],
         ]);
 
-//////////// price
-//        $component_row =  Component::Where('component_name',$validated['component_name'])->first();
-//
-//        $old_price=Meal::Where('id',$meal->id)->first();
-//
-//        $price = conversion($meal->id);
-//
-//        $old_price->update(['meal_price' => $old_price+$price]);
-////////////
+////////// price///
 
-        return response()->json($component_in_meal,Response::HTTP_CREATED);
-        // HTTP_CREATED = 201  *  يعني تأنشأ صح  *
+          $meal_row = Meal::Where('id',$meal->id)->first();
+        $component_row =  Component::Where('component_name',$validated['component_name'])->first();
+        if ($component_row->component_unit_of_measurement != $validated['component_in_meal_unit_of_measurement']) {
+            $quantity = Component_in_meal::convert( $validated['component_in_meal_quantity'], $validated['component_in_meal_unit_of_measurement'], $component_row->component_unit_of_measurement);
+            $price= $component_row->component_price*$quantity;
+         //   $price = (new \App\Models\Component_in_meal)->conversion($component_in_meal);
+            $meal_row->update(['meal_price' => $meal_row->meal_price + $price]);
+            return response()->json($component_in_meal,Response::HTTP_CREATED);
+
+
+        }
+        elseif($component_row->component_unit_of_measurement = $validated['component_in_meal_unit_of_measurement']){
+            $price= $component_row->component_price*$validated['component_in_meal_quantity'];
+            $meal_row->update(['meal_price' => $meal_row->meal_price + $price]);
+            return response()->json($component_in_meal,Response::HTTP_CREATED);
+
+        }
+        else{
+            return response()->json(['message' => 'error, please try again'],
+                Response::HTTP_OK);
+        }
+    }catch (\Illuminate\Database\QueryException $e) {
+            // إذا حدثت خطأ بسبب قيد فريد (تكرار مكون)
+            return response()->json(['message' => 'This component is already added to the meal'], Response::HTTP_BAD_REQUEST);
+        }
+
     }
 
     /**
@@ -79,13 +97,88 @@ class Component_In_MealController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Component_in_meal  $component_in_meal
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Component_in_meal $component_in_meal)
-    {
-        //
 
+//    public function update(ComponentInMealUpdateRequest $request, Meal $meal, Component_in_meal $component_in_meal)
+//    {
+//
+//        //طرح سعر المكون القديم من سعر الوجبة ليتم اضافة السعر الجديد
+//        $old_quantity = $component_in_meal->component_in_meal_quantity;
+//        $old_component_in_meal_unit_of_measurement = $component_in_meal->component_in_meal_unit_of_measurement;
+//        $validated = $request->validated();
+//        $meal_row = Meal::Where('id',$meal->id)->first();
+//        $component_row =  Component::Where('id',$component_in_meal->component_id)->first();
+//
+//        if ($component_row->component_unit_of_measurement !=$old_component_in_meal_unit_of_measurement ) {
+//            $quantity = Component_in_meal::convert( $old_quantity,$old_component_in_meal_unit_of_measurement , $component_row->component_unit_of_measurement);
+//            $price= $component_row->component_price*$quantity;
+//            $meal_row->update(['meal_price' => $meal_row->meal_price-$price]);
+//        }
+//        else{
+//            $price= $component_row->component_price*$old_quantity;
+//            $meal_row->update(['meal_price' => $meal_row->meal_price - $price]);
+//        }
+//
+//        if($validated['component_in_meal_unit_of_measurement']){
+//            $component_in_meal_unit_of_measurement = $validated['component_in_meal_unit_of_measurement'];
+//        }else {
+//            $component_in_meal_unit_of_measurement = $old_component_in_meal_unit_of_measurement;
+//        }
+//        if($validated['component_in_meal_quantity']){
+//            $component_in_meal_quantity=$validated['component_in_meal_quantity'];
+//        }else{
+//            $component_in_meal_quantity= $old_quantity;
+//        }
+//
+//        if ($component_row->component_unit_of_measurement != $component_in_meal_unit_of_measurement) {
+//            $quantity = Component_in_meal::convert( $component_in_meal_quantity, $component_in_meal_unit_of_measurement, $component_row->component_unit_of_measurement);
+//            $price= $component_row->component_price*$quantity;
+//            $meal_row->update(['meal_price' => $meal_row->meal_price + $price]);
+//            return response()->json(['message' => 'ok1'],Response::HTTP_CREATED);
+//
+//
+//        }
+//        elseif($component_row->component_unit_of_measurement = $component_in_meal_unit_of_measurement){
+//            $price= $component_row->component_price*$component_in_meal_quantity;
+//            $meal_row->update(['meal_price' => $meal_row->meal_price + $price]);
+//            return response()->json(['message' => 'ok2'],Response::HTTP_CREATED);
+//
+//        }
+//        else{
+//            return response()->json(['message' => 'error, please try again'],
+//                Response::HTTP_OK);
+//        }
+//        $component_in_meal->update($validated);
+//
+//    }
+
+    public function update(ComponentInMealUpdateRequest $request, Meal $meal, Component_in_meal $component_in_meal)
+    {
+        $validated = $request->validated();
+        $old_quantity = $component_in_meal->component_in_meal_quantity;
+        $old_unit_of_measurement = $component_in_meal->component_in_meal_unit_of_measurement;
+
+        // تحديث البيانات في الجدول
+        $component_in_meal->update([
+            'component_in_meal_quantity' => $validated['component_in_meal_quantity'] ?? $old_quantity,
+            'component_in_meal_unit_of_measurement' => $validated['component_in_meal_unit_of_measurement'] ?? $old_unit_of_measurement,
+        ]);
+
+        $component = Component::find($component_in_meal->component_id);
+        $meal_row = $meal;
+        $component_row = $component;
+
+        // حساب التكلفة القديمة والجديدة
+        $old_cost = $component_row->component_price * Component_in_meal::convert($old_quantity, $old_unit_of_measurement, $component_row->component_unit_of_measurement);
+        $new_cost = $component_row->component_price * Component_in_meal::convert($validated['component_in_meal_quantity'], $validated['component_in_meal_unit_of_measurement'], $component_row->component_unit_of_measurement);
+
+        // تحديث سعر الوجبة
+        $meal_row->update(['meal_price' => $meal_row->meal_price - $old_cost + $new_cost]);
+
+        return response()->json(['message' => 'ok'], Response::HTTP_OK);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -93,11 +186,17 @@ class Component_In_MealController extends Controller
      * @param  \App\Models\Component_in_meal  $component_in_meal
      * @return \Illuminate\Http\JsonResponse|Response
      */
-    public function destroy(Component_in_meal $component_in_meal)
+    public function destroy(Meal $meal, Component_in_meal $component_in_meal)
     {
+        $component = Component::find($component_in_meal->component_id);
+        $old_cost = $component->component_price * Component_in_meal::convert($component_in_meal->component_in_meal_quantity, $component_in_meal->component_in_meal_unit_of_measurement, $component->component_unit_of_measurement);
+
+        // حذف المكون من وجبة
         $component_in_meal->delete();
-        return response()->json(['message' => 'component in meal deleted successfully']);
 
+        $meal->update(['meal_price' => $meal->meal_price - $old_cost]);
 
+        return response()->json(['message' => 'Component deleted successfully'], Response::HTTP_OK);
     }
+
 }

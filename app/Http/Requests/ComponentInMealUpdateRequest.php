@@ -24,7 +24,6 @@ class ComponentInMealUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'component_name' => ['string'],
             'component_in_meal_quantity' => ['numeric','gte:0'],
             'component_in_meal_unit_of_measurement' => ['string']
         ];

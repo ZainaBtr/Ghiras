@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('component_in_meal_quantity');
             $table->string('component_in_meal_unit_of_measurement');
             $table->timestamps();
+            $table->unique(['meal_id', 'component_id']);
         });
     }
 
