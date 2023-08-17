@@ -49,11 +49,32 @@ class MealController extends Controller
 
             $meals_data->push($data) ;
         }
-        $clieant_meal_data =  $meals_data ->pluck('meal_name')->all();
-
 
         return response()->json($meals_data,Response::HTTP_OK);
     }
+//التابع مو شغال //
+    public function show_Meal_Components(Meal $meal)
+    {
+        $components = component_in_meal::Where('meal_id',$meal->id);
+
+        return response()->json(['components' => $components], Response::HTTP_OK);
+    }
+    public function showComponents(Meal $meal)
+    {
+        $components = $meal->components->map(function ($component) {
+            return [
+                'component_name' => $component->component_name,
+                'component_in_meal_quantity' => $component->pivot->component_in_meal_quantity,
+                'component_in_meal_unit_of_measurement' => $component->pivot->component_in_meal_unit_of_measurement,
+            ];
+        });
+
+        return response()->json([
+            'meal_name' => $meal->meal_name, // افترض أن هناك حقلًا يسمى meal_name
+            'components' => $components,
+        ], Response::HTTP_OK);
+    }
+
 
 
 

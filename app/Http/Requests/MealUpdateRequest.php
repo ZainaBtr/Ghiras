@@ -24,8 +24,9 @@ class MealUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $meal = $this->route('meal'); // Assuming the route parameter is named 'component'
         return [
-            'meal_name' => ['string',Rule::unique('meals')],
+            'meal_name' => ['string',Rule::unique('meals')->ignore($meal)],
             'category_name' => ['string'],
             'meal_type' => ['string'],
             'meal_price_show' => ['numeric','gte:0'],

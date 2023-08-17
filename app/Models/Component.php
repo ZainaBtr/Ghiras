@@ -27,7 +27,7 @@ class Component extends Model
 
     public function meals()
     {
-        return $this->belongsToMany(Meal::class, 'component_in_meal', 'component_id', 'meal_id')
-            ->withPivot('quantity', 'unit_of_measurement');
+        return $this->belongsToMany(Meal::class, 'components_in_meals', 'component_id', 'meal_id')
+            ->withPivot('component_in_meal_quantity', 'component_in_meal_unit_of_measurement');
     }
 }

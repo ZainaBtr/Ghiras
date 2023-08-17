@@ -100,58 +100,6 @@ class Component_In_MealController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-//    public function update(ComponentInMealUpdateRequest $request, Meal $meal, Component_in_meal $component_in_meal)
-//    {
-//
-//        //طرح سعر المكون القديم من سعر الوجبة ليتم اضافة السعر الجديد
-//        $old_quantity = $component_in_meal->component_in_meal_quantity;
-//        $old_component_in_meal_unit_of_measurement = $component_in_meal->component_in_meal_unit_of_measurement;
-//        $validated = $request->validated();
-//        $meal_row = Meal::Where('id',$meal->id)->first();
-//        $component_row =  Component::Where('id',$component_in_meal->component_id)->first();
-//
-//        if ($component_row->component_unit_of_measurement !=$old_component_in_meal_unit_of_measurement ) {
-//            $quantity = Component_in_meal::convert( $old_quantity,$old_component_in_meal_unit_of_measurement , $component_row->component_unit_of_measurement);
-//            $price= $component_row->component_price*$quantity;
-//            $meal_row->update(['meal_price' => $meal_row->meal_price-$price]);
-//        }
-//        else{
-//            $price= $component_row->component_price*$old_quantity;
-//            $meal_row->update(['meal_price' => $meal_row->meal_price - $price]);
-//        }
-//
-//        if($validated['component_in_meal_unit_of_measurement']){
-//            $component_in_meal_unit_of_measurement = $validated['component_in_meal_unit_of_measurement'];
-//        }else {
-//            $component_in_meal_unit_of_measurement = $old_component_in_meal_unit_of_measurement;
-//        }
-//        if($validated['component_in_meal_quantity']){
-//            $component_in_meal_quantity=$validated['component_in_meal_quantity'];
-//        }else{
-//            $component_in_meal_quantity= $old_quantity;
-//        }
-//
-//        if ($component_row->component_unit_of_measurement != $component_in_meal_unit_of_measurement) {
-//            $quantity = Component_in_meal::convert( $component_in_meal_quantity, $component_in_meal_unit_of_measurement, $component_row->component_unit_of_measurement);
-//            $price= $component_row->component_price*$quantity;
-//            $meal_row->update(['meal_price' => $meal_row->meal_price + $price]);
-//            return response()->json(['message' => 'ok1'],Response::HTTP_CREATED);
-//
-//
-//        }
-//        elseif($component_row->component_unit_of_measurement = $component_in_meal_unit_of_measurement){
-//            $price= $component_row->component_price*$component_in_meal_quantity;
-//            $meal_row->update(['meal_price' => $meal_row->meal_price + $price]);
-//            return response()->json(['message' => 'ok2'],Response::HTTP_CREATED);
-//
-//        }
-//        else{
-//            return response()->json(['message' => 'error, please try again'],
-//                Response::HTTP_OK);
-//        }
-//        $component_in_meal->update($validated);
-//
-//    }
 
     public function update(ComponentInMealUpdateRequest $request, Meal $meal, Component_in_meal $component_in_meal)
     {

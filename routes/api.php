@@ -33,6 +33,7 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
     });
         Route::prefix("meals")->group(function () {
             Route::get('/', [\App\Http\Controllers\MealController::class, 'index']);
+            Route::get('/show/{meal}', [\App\Http\Controllers\MealController::class, 'showComponents']);
             Route::get('/menu', [\App\Http\Controllers\MealController::class, 'menu']);
             Route::post('/', [\App\Http\Controllers\MealController::class, 'store']);
             Route::put('/{meal}', [\App\Http\Controllers\MealController::class, 'update']);
@@ -44,6 +45,7 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
         Route::get('/search/', [\App\Http\Controllers\ComponentController::class, 'findComponent']);
         Route::post('/',[\App\Http\Controllers\ComponentController::class, 'store']);
         Route::get('/{id}',[\App\Http\Controllers\ComponentController::class, 'show']);
+        Route::get('/filter/{component_address}',[\App\Http\Controllers\ComponentController::class, 'filterByAddress']);
         Route::put('/{id}',[\App\Http\Controllers\ComponentController::class, 'update']);
         Route::delete('/{compoent}',[\App\Http\Controllers\ComponentController::class, 'destroy']);
     });
@@ -57,12 +59,18 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
         Route::delete('/{meal}/{component_in_meal}',[\App\Http\Controllers\Component_In_MealController::class, 'destroy']);
     });
 
+    Route::prefix("percentage")->group( function (){
+        Route::get('/',[\App\Http\Controllers\PercentageController::class, 'index']);
+        Route::post('/',[\App\Http\Controllers\PercentageController::class, 'store']);
+    } );
+
 //});
 
 
 
 Route::middleware(['auth:api'])->group(function() {
     Route::get('/auth/show_client_profile',[App\Http\Controllers\AuthController::class,'show_client_profile']);
+    Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::class,'updateClientAccount']);
 
 });
 

@@ -15,12 +15,11 @@ return new class extends Migration
     {
         Schema::create('components', function (Blueprint $table) {
             $table->id();
-            $table-> string('component_name')->unique();
+            $table-> string('component_name');
             $table->string('component_type');
             $table->float('component_price');
             $table->string('component_address');
             $table->float('component_minimal_quantity');
-            $table->float('component_added_quantity');
             $table-> float('component_available_quantity');
             $table->string('component_unit_of_measurement');
             $table->date('component_appointment_end_date_reminder');

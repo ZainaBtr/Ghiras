@@ -165,7 +165,7 @@ class AuthController extends Controller
 
             $user->save();
 
-        return response()->json( $user , Response::HTTP_OK);
+        return response()->json( ['message' => 'updated successfully'], Response::HTTP_OK);
     }
 
     public function show_client_profile(): \Illuminate\Http\JsonResponse
