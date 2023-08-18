@@ -63,6 +63,21 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
         Route::get('/',[\App\Http\Controllers\PercentageController::class, 'index']);
         Route::post('/',[\App\Http\Controllers\PercentageController::class, 'store']);
     } );
+    Route::prefix("component_bills")->group( function () {
+    Route::post('/transfer/{componentBill}',[\App\Http\Controllers\ComponentBillController::class, 'transfer']);
+    Route::get('/{component}',[\App\Http\Controllers\ComponentBillController::class, 'index']);
+    Route::post('/{component}',[\App\Http\Controllers\ComponentBillController::class, 'store']);
+    Route::put('/{componentBill}',[\App\Http\Controllers\ComponentBillController::class, 'update']);
+    Route::delete('/{componentBill}',[\App\Http\Controllers\ComponentBillController::class, 'destroy']);
+    });
+
+    Route::prefix("component_bill_in_fridges")->group( function () {
+    Route::get('/{component}',[\App\Http\Controllers\ComponentBillInFridgeController::class, 'index']);
+    Route::post('/{component}',[\App\Http\Controllers\ComponentBillInFridgeController::class, 'store']);
+    Route::put('/{componentBillInFridge}',[\App\Http\Controllers\ComponentBillInFridgeController::class, 'update']);
+    Route::delete('/{componentBillInFridge}',[\App\Http\Controllers\ComponentBillInFridgeController::class, 'destroy']);
+    });
+
 
 
 //});
