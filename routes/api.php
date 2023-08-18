@@ -27,7 +27,7 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
 //Route::middleware(['auth:api'])->group(function() {
     Route::prefix("categories")->group( function () {
         Route::get('/',[\App\Http\Controllers\CategoryController::class,'index']);
-        Route::get('/{category}',[\App\Http\Controllers\CategoryController::class,'get_meals_in']);
+        Route::get('/meal',[\App\Http\Controllers\CategoryController::class,'get_meals_in']);
         Route::post('/',[\App\Http\Controllers\CategoryController::class,'store']);
         Route::delete('/{category}', [\App\Http\Controllers\CategoryController::class,'destroy']);
     });
@@ -64,6 +64,7 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
         Route::post('/',[\App\Http\Controllers\PercentageController::class, 'store']);
     } );
 
+
 //});
 
 
@@ -71,6 +72,10 @@ Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::cla
 Route::middleware(['auth:api'])->group(function() {
     Route::get('/auth/show_client_profile',[App\Http\Controllers\AuthController::class,'show_client_profile']);
     Route::put('/auth/updateCLientAccount',[App\Http\Controllers\AuthController::class,'updateClientAccount']);
+    Route::post('/auth/addToCart/{meal}',[\App\Http\Controllers\Item_In_Order_Controller::class, 'addToCart']);
+    Route::get('/auth/viewCart/',[\App\Http\Controllers\Item_In_Order_Controller::class, 'viewCart']);
+    Route::put('/auth/submitCart/',[\App\Http\Controllers\Item_In_Order_Controller::class, 'submitCart']);
+
 
 });
 

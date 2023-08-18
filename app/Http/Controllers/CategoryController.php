@@ -12,9 +12,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-//$path="C:\xampp\htdocs\MyProjects\market\json\products_list.json";
-//$json=json_decode(file_get_contents($path),true);
-
 class CategoryController extends Controller
 {
     /**
@@ -30,12 +27,22 @@ class CategoryController extends Controller
         // HTTP_OK = 200  *    *
     }
 
-    public function get_meals_in(Category $category){
-        $id = $category->id;
-        $meals_in_category = Meal::Where('category_id',$id)->get()->pluck('meal_name')->all();
-        return response()->json($meals_in_category,Response::HTTP_OK);
+    public function get_meals_in(Request $request)
+    {
+        $category_name = $request->category_name;
+        $category = Category::where('category_name', $category_name)->first();
 
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $meals_in_category = Meal::where('category_id', $category->id)
+            ->get(['meal_name','meal_picture']) // استرجاع اسم الوجبة والصورة فقط
+            ->toArray();
+
+        return response()->json($meals_in_category, Response::HTTP_OK);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -51,24 +58,6 @@ class CategoryController extends Controller
         return response()->json($category_name,Response::HTTP_CREATED);
         // HTTP_CREATED = 201  *  يعني تأنشأ صح  *
     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\JsonResponse
-     */
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\JsonResponse
-     */
-
 
     /**
      * Remove the specified resource from storage.

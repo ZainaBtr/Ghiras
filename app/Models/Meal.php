@@ -38,4 +38,8 @@ class Meal extends Model
     {
         return $this->belongsToMany(Order::class)->withPivot('item_quantity', 'item_note', 'item_acceptance');
     }
+    public function items()
+    {
+        return $this->hasMany(Item_In_Order::class, 'meal_id');
+    }
 }

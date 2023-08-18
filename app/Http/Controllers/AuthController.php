@@ -138,7 +138,6 @@ class AuthController extends Controller
 
             $id = auth()->id();
                 //Auth::id();
-
         $user = User::findOrFail($id);
 
         // تحديث الحقول المطلوبة فقط

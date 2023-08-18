@@ -39,7 +39,6 @@ class ComponentInMealStoreRequest extends FormRequest
 
         return [
             'component_name' => ['required','string',
-
             ],
             'component_in_meal_quantity' => ['required','numeric','gte:0'],
             'component_in_meal_unit_of_measurement' => ['required','string']

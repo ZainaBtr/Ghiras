@@ -52,13 +52,7 @@ class MealController extends Controller
 
         return response()->json($meals_data,Response::HTTP_OK);
     }
-//التابع مو شغال //
-    public function show_Meal_Components(Meal $meal)
-    {
-        $components = component_in_meal::Where('meal_id',$meal->id);
 
-        return response()->json(['components' => $components], Response::HTTP_OK);
-    }
     public function showComponents(Meal $meal)
     {
         $components = $meal->components->map(function ($component) {
@@ -70,7 +64,7 @@ class MealController extends Controller
         });
 
         return response()->json([
-            'meal_name' => $meal->meal_name, // افترض أن هناك حقلًا يسمى meal_name
+            'meal_name' => $meal->meal_name,
             'components' => $components,
         ], Response::HTTP_OK);
     }

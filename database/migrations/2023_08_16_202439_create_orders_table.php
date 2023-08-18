@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')->references('id')->on('users');
-            $table->dateTime('order_date');
-            $table->dateTime('order_time');
-            $table->string('order_state')->default('pending');
+            $table->date('date_order'); // التاريخ الذي تم فيه ارسال الطلب
+            $table->time('time_order'); // الوقت الذي تم فيه ارسال الطلب
+            $table->date('order_date'); // التاريخ الذي يرسم المستخد استلام الطلب فيه
+            $table->time('order_time'); // الوقت الذي يريد المستخد استلام الطلب فيه
+            $table->string('order_state')->default('not sent');
             $table->float('order_cost')->default(0);
             $table->integer('order_discount_percent')->default(0);
             $table->float('order_total_price');

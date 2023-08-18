@@ -39,7 +39,6 @@ class ComponentController extends Controller
             'component_price' => ['required'],
             'component_address' => ['required'],
             'component_minimal_quantity' => ['required'],
-            'component_added_quantity' => ['required'],
             'component_available_quantity' => ['required'],
             'component_unit_of_measurement' => ['required'],
             'component_appointment_end_date_reminder' => ['required'],
@@ -55,7 +54,6 @@ class ComponentController extends Controller
         $component_price=$request->component_price;
         $component_address=$request->component_address;
         $component_minimal_quantity=$request->component_minimal_quantity;
-        $component_added_quantity=$request->component_added_quantity;
         $component_available_quantity=$request->component_available_quantity;
         $component_unit_of_measurement=$request->component_unit_of_measurement;
         $component_appointment_end_date_reminder=$request->component_appointment_end_date_reminder;
@@ -67,7 +65,6 @@ class ComponentController extends Controller
             'component_price'=>$component_price,
             'component_address'=>$component_address,
             'component_minimal_quantity'=>$component_minimal_quantity,
-            'component_added_quantity'=>$component_added_quantity,
             'component_available_quantity'=>$component_available_quantity,
             'component_unit_of_measurement'=>$component_unit_of_measurement,
             'component_appointment_end_date_reminder'=>$component_appointment_end_date_reminder,
@@ -119,9 +116,7 @@ class ComponentController extends Controller
         if ($request->has('component_minimal_quantity')) {
             $component->component_minimal_quantity = $request->input('component_minimal_quantity');
         }
-        if ($request->has('component_added_quantity')) {
-            $component->component_added_quantity = $request->input('component_added_quantity');
-        }
+
         if ($request->has('component_available_quantity')) {
             $component->component_available_quantity = $request->input('component_available_quantity');
 

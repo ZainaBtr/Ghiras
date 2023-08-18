@@ -5,6 +5,7 @@ use App\Http\Controllers\Meal;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
@@ -13,15 +14,19 @@ class Order extends Model
     public $primaryKey = "id";
     public $timestamp = true ;
     protected $fillable = [
+        'client_id',
+        'order_date',
         'order_time',
         'order_state',
         'order_cost',
         'order_discount_percent',
-        'order_total_price'
+        'order_total_price',
+        'time_order',
+        'date_order'
     ];
 
     protected $hidden = [
-        'client_id'
+
     ];
 
     public static function boot()
@@ -29,11 +34,12 @@ class Order extends Model
         parent::boot();
 
         static::creating(function ($order) {
-            $order->order_date = Carbon::now(); // تعيين الوقت الحالي للطلب
+            $order->time_order = Carbon::now();// تعيين الوقت الحالي للطلب
         });
     }
-    public function meals()
+
+    public function items()
     {
-        return $this->belongsToMany(Meal::class)->withPivot('item_quantity', 'item_note', 'item_acceptance');
+        return $this->hasMany(Item_In_Order::class);
     }
 }
